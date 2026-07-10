@@ -130,13 +130,13 @@ async function initializeFlags() {
         
         countryPool = data.map(item => ({
             name: item.name.common,
-            // Grab alternate spellings so users typing "USA" or "UK" don't get punished
             acceptedNames: [
                 item.name.common.toLowerCase(),
                 ...(item.name.official ? [item.name.official.toLowerCase()] : []),
                 ...(item.altSpellings ? item.altSpellings.map(s => s.toLowerCase()) : [])
             ],
-            flagUrl: item.flags.svg || item.flags.png
+            // Optimized: Prefer lightweight PNGs first to speed up initial network response
+            flagUrl: item.flags.png || item.flags.svg
         })).filter(c => c.name && c.flagUrl && c.name.toLowerCase() !== 'israel');
         
         if (countryPool.length === 0) throw new Error("Processing Yield Null");
@@ -160,6 +160,16 @@ function resetUniquePool() {
     shuffleArray(remainingCountries);
 }
 
+// --- Background Image Preloader ---
+function preloadNextFlag() {
+    if (remainingCountries.length > 0) {
+        // Look ahead at the next item in the deck and silently load it into browser cache
+        const nextCountry = remainingCountries[remainingCountries.length - 1];
+        const preloader = new Image();
+        preloader.src = nextCountry.flagUrl;
+    }
+}
+
 // --- Game Progression Engine ---
 function generateNextRound() {
     feedbackBox.className = "feedback-box hidden";
@@ -169,7 +179,6 @@ function generateNextRound() {
     countryInput.disabled = false;
     countryInput.value = "";
     
-    // Only auto-focus on non-mobile devices to prevent annoying keyboard jump
     if (window.innerWidth > 600) {
         countryInput.focus();
     }
@@ -183,7 +192,6 @@ function generateNextRound() {
     
     currentQuestion = remainingCountries.pop();
     
-    // Fade image in smoothly
     flagImage.classList.add('hidden-opacity');
     flagImage.onload = () => {
         flagImage.classList.remove('hidden-opacity');
@@ -194,6 +202,9 @@ function generateNextRound() {
     progressCount.textContent = `${seenCount}/${countryPool.length}`;
     const percentage = (seenCount / countryPool.length) * 100;
     progressFill.style.width = `${percentage}%`;
+
+    // Fire preloader immediately to fetch the upcoming image while user interacts with UI
+    preloadNextFlag();
 }
 
 function processGuess() {
@@ -204,7 +215,6 @@ function processGuess() {
     submitBtn.classList.add('hidden');
     nextBtn.classList.remove('hidden');
     
-    // Check against all accepted names (common, official, alt spellings) and pick the best match
     let bestAccuracy = 0;
     currentQuestion.acceptedNames.forEach(altName => {
         const accuracy = calculateSimilarity(userGuess, altName);
@@ -221,7 +231,6 @@ function processGuess() {
         feedbackBox.className = "feedback-box correct";
         feedbackText.textContent = "✓ Correct!";
         
-        // Only show close match text if it wasn't a 100% perfect guess
         if (bestAccuracy < 1.0) {
             closestMatchText.textContent = `Accepted Match Name: ${targetName}`;
         } else {
@@ -236,7 +245,6 @@ function processGuess() {
         closestMatchText.textContent = `That was the flag of: ${targetName}`;
     }
 
-    // Give focus to the Next button so the user can just hit 'Enter' to keep playing
     nextBtn.focus();
 }
 
