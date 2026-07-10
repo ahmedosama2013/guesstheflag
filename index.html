@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Guess The Flag</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="main-header">
+            <div class="header-branding">
+                <h1>Guess The Flag</h1>
+                <p class="subtitle">Test your global geography knowledge.</p>
+            </div>
+            <div class="header-controls">
+                <div class="score-board">Streak: <span id="score">0</span></div>
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">🌙</button>
+            </div>
+        </header>
+
+        <main class="main-layout">
+            <div class="flag-card">
+                <div id="loading-container" class="loading-state">
+                    <span class="spinner">⏳</span> Loading Flags...
+                </div>
+                <img id="flag-image" src="" alt="Flag to guess" class="flag-img hidden-opacity">
+                
+                <div id="completion-overlay" class="completion-overlay hidden">
+                    <span class="completion-icon">🏆</span>
+                    <h2>All Flags Cleared!</h2>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar-container">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <p class="progress-text">Flag pool status: <span id="progress-count">0/0</span> seen</p>
+            </div>
+            
+            <div id="feedback-box" class="feedback-box hidden">
+                <p id="feedback-text"></p>
+                <p id="closest-match-text" class="sub-feedback"></p>
+            </div>
+            
+            <form id="guess-form" class="interaction-zone">
+                <div class="input-wrapper">
+                    <input type="text" id="country-input" placeholder="Type your country guess..." autocomplete="off" disabled>
+                </div>
+                <div class="action-buttons">
+                    <button type="submit" id="submit-btn" class="primary-btn" disabled>Submit Guess</button>
+                    <button type="button" id="next-btn" class="secondary-btn hidden">Next Flag ➔</button>
+                </div>
+            </form>
+        </main>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

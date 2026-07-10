@@ -1,0 +1,343 @@
+/* --- Core System Styles & Layout variables --- */
+:root {
+    --bg-main: #f0f4f1;
+    --bg-surface: #ffffff;
+    --bg-nest: #f7faf8;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --accent: #1e6022;
+    --accent-light: #e8f5e9;
+    --accent-hover: #134e17;
+    --border-color: #cbd5e1;
+    --success: #16a34a;
+    --success-light: #d1fae5;
+    --error: #dc2626;
+    --error-light: #fee2e2;
+    --shadow-md: 0 10px 25px rgba(0,0,0,0.06);
+    --radius: 14px;
+    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+    --bg-main: #090d0a;
+    --bg-surface: #121814;
+    --bg-nest: #1a221c;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent: #4caf50;
+    --accent-light: #16331a;
+    --accent-hover: #66bb6a;
+    --border-color: #2d3748;
+}
+
+/* --- Base Framework resets --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    min-height: 100vh;
+    width: 100%;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    transition: background-color var(--transition);
+}
+
+.app-container {
+    width: 100%;
+    max-width: 600px;
+    background-color: var(--bg-surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: background-color var(--transition);
+}
+
+/* --- Top Header Area --- */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 16px;
+    gap: 16px;
+}
+
+.main-header h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    margin-top: 4px;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.score-board {
+    background-color: var(--accent-light);
+    color: var(--accent);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.icon-btn {
+    background: var(--bg-nest);
+    border: 1px solid var(--border-color);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+/* --- Layout Components --- */
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.flag-card {
+    background-color: var(--bg-nest);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.flag-img {
+    max-width: 90%;
+    max-height: 85%;
+    object-fit: contain;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: opacity 0.3s ease-in-out;
+}
+
+.hidden-opacity {
+    opacity: 0;
+}
+
+/* --- Completion & Progress Tracking --- */
+.progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background-color: var(--bg-nest);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background-color: var(--accent);
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: right;
+    font-weight: 600;
+}
+
+.completion-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-surface);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    z-index: 10;
+}
+
+.completion-icon {
+    font-size: 3rem;
+    animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+}
+
+/* --- Loading States --- */
+.loading-state {
+    position: absolute;
+    text-align: center;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.spinner {
+    display: inline-block;
+    font-size: 2rem;
+    animation: spin 2.5s linear infinite;
+    margin-bottom: 8px;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+/* --- Interaction Zone --- */
+.input-wrapper {
+    position: relative;
+    margin-bottom: 14px;
+}
+
+#country-input {
+    width: 100%;
+    height: 56px; 
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    background-color: var(--bg-nest);
+    color: var(--text-primary);
+    outline: none;
+    transition: var(--transition);
+    text-overflow: ellipsis;
+}
+
+#country-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-light);
+}
+
+#country-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.primary-btn, .secondary-btn {
+    height: 52px;
+    padding: 0 24px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.primary-btn {
+    background-color: var(--accent);
+    color: white;
+}
+
+.primary-btn:hover:not(:disabled) {
+    background-color: var(--accent-hover);
+}
+
+.primary-btn:focus-visible, .secondary-btn:focus-visible {
+    outline: 3px solid var(--accent-light);
+    outline-offset: 2px;
+}
+
+.secondary-btn {
+    background-color: var(--text-primary);
+    color: var(--bg-surface);
+}
+
+/* --- Dynamic Feedback Cards --- */
+.feedback-box {
+    padding: 16px;
+    border-radius: var(--radius);
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    animation: popIn 0.25s ease-out forwards;
+}
+
+.feedback-box.correct {
+    background-color: var(--success-light);
+    color: var(--success);
+    border: 2px solid var(--success);
+}
+
+.feedback-box.wrong {
+    background-color: var(--error-light);
+    color: var(--error);
+    border: 2px solid var(--error);
+}
+
+.sub-feedback {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 4px;
+    opacity: 0.9;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.96); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 600px) {
+    body { padding: 12px; }
+    .app-container { padding: 20px; gap: 16px; }
+    .main-header h1 { font-size: 1.5rem; }
+    .flag-card { height: 210px; }
+    #country-input { height: 50px; font-size: 1rem; }
+    .primary-btn, .secondary-btn { height: 48px; }
+}
